@@ -190,9 +190,8 @@
 		var l=document.getElementById("l").value;
 		var msl=document.getElementById("msl").value;
 		var ncee=document.getElementById("ncee").value;
-        
         var m=27;
-        var n=l_arr.length +4;
+        var n=l*msl +4;
         const temp= new Array(m).fill(-1).map( () => new Array(n).fill(-1));
         MakeStandardEmptyArray(temp,msl,l,rnti,ncee,m,n);
         createtable(temp);   
