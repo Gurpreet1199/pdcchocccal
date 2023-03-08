@@ -118,9 +118,10 @@
         for(var i=7;i<m;i++){
             idname=i.toString()+","+"2";
             document.getElementById(idname).style.backgroundColor='#abce01';
-        }	
+        }
+		for(var i=7;i<m;i++){
             for(var j=4;j<n;j++){
-                idname="4"+","+j.toString();
+                idname=i.toString()+","+j.toString();
                 if(arr[4][j]==0){
                     document.getElementById(idname).style.backgroundColor='#acddde'
                 }
@@ -144,6 +145,7 @@
                 }
                 
             }
+			}
         for(j=4;j<n;j++){
             idname="3"+","+j.toString();
             document.getElementById(idname).style.backgroundColor='#F2A784'
