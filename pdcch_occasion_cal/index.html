@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+  
+    </style>
+</head>
+
+<h1 align="center"  >PDCCH OCASSIONS CALCULATOR</h1>
+
+<form name="frm" onsubmit="decode(); return false;" action="">
+	<table class="form" cellspacing="0" align="center">
+		<tbody>
+            <tr bgcolor="#F5F3EF">
+				<td>L</td>
+				<td><input name="l" type="text" value="" id="l" placeholder="L value"></td> 
+				<td></td>
+			</tr>
+            <tr bgcolor="#F5F3EF">
+				<td>MS(L)</td>
+				<td><input name="msl" type="text" value="" id="msl" placeholder="msl value"></td> 
+				<td></td>
+			</tr>
+            <tr bgcolor="#F5F3EF">
+				<td>NCCE</td>
+				<td><input name="ncee" type="text" value="" id="ncee" placeholder="ncee value"></td> 
+				<td></td>
+			</tr>
+			<tr bgcolor="#F5F3EF">
+				<td>RNTI</td>
+				<td><input name="rnti" type="text" value="" id="rnti" placeholder="rnti value"></td> 
+				<td></td>
+			</tr>
+            
+		</tbody>
+	</table>
+    <br>
+    <input type="button" ="center" value="Calculate" onclick="output();"/>
+</form>
+<script>
+    function MakeStandardEmptyArray(arr,msl,l,rnti,ncee,m,n){
+        arr[0][3]="L";
+        arr[1][3]="Ms(L)";
+        arr[2][3]="Ncce";
+        arr[0][4]=l;
+        arr[1][4]=msl;
+        arr[2][4]=ncee;
+        arr[3][3]="i";
+        arr[4][3]="ms,nci";
+        arr[4][2]=39827;
+        arr[4][1]="Ap";
+        arr[5][0]="Slot";
+        arr[5][1]="D";
+        arr[5][2]="65537";
+        arr[6][2]=rnti;
+        loop=0;
+        temp=-1;
+        for(var i=4;i<n;i++){
+            arr[3][i]=(loop%l);
+            
+            if(loop%l==0){
+                temp+=1;
+            }
+            arr[4][i]=temp
+            loop++;
+            
+        }
+        for(var i=6;i<m;i++){
+            arr[i][0]=i-7
+            arr[i][1]="Yk"
+        }
+        for(i=7;i<m;i++){
+            arr[i][2]=((arr[i-1][2])*(arr[4][2]))%(arr[5][2]);
+        }
+        var c=(arr[2][4]/arr[0][4]);
+        var x=l*msl;
+        for(var i=7;i<m;i++){
+            for(j=4;j<n;j++){
+                
+                a=arr[i][2];
+                b=Math.floor((arr[4][j]*arr[2][4])/x);
+                d=arr[3][j];
+                val=l*((a+b)%c) + d;
+                console.log(a,b,c,d);
+                arr[i][j]=val
+                
+            }
+        }
+        for(i=0;i<m;i++){
+            for(j=0;j<n;j++){
+                if(arr[i][j]==-1){
+                    arr[i][j]="";
+                }
+            }
+        }
+    }
+    function colortable(arr,m,n,l,msl,rnti,ncee){
+        for(i=0;i<m;i++){
+            for(j=0;j<n;j++){
+                idname=i.toString()+","+j.toString();
+                document.getElementById(idname).style.backgroundColor='#F5F3EF';    
+            }
+        }
+        for(var i=7;i<m;i++){
+            idname=i.toString()+","+"0";
+            document.getElementById(idname).style.backgroundColor='#add8e6';
+        }
+        for(var i=7;i<m;i++){
+            idname=i.toString()+","+"2";
+            document.getElementById(idname).style.backgroundColor='#abce01';
+        }	
+            for(var j=4;j<n;j++){
+                idname="4"+","+j.toString();
+                if(arr[4][j]==0){
+                    document.getElementById(idname).style.backgroundColor='#acddde'
+                }
+                else if(arr[4][j]==1){
+                    document.getElementById(idname).style.backgroundColor='#caf1de'
+                }
+                else if(arr[4][j]==2){
+                    document.getElementById(idname).style.backgroundColor='#e1f8dc'
+                }
+                else if(arr[4][j]==3){
+                    document.getElementById(idname).style.backgroundColor='#fef8dd'
+                }
+                else if(arr[4][j]==4){
+                    document.getElementById(idname).style.backgroundColor='#ffe7c7'
+                }
+                else if(arr[4][j]==5){
+                    document.getElementById(idname).style.backgroundColor='#f7d8ba'
+                }
+                else if(arr[4][j]==6){
+                    document.getElementById(idname).style.backgroundColor='#d7e9cc'
+                }
+                
+            }
+        for(j=4;j<n;j++){
+            idname="3"+","+j.toString();
+            document.getElementById(idname).style.backgroundColor='#F2A784'
+        }
+        for(j=4;j<n;j++){
+            idname="4"+","+j.toString();
+            document.getElementById(idname).style.backgroundColor='#DBCBB9'
+        }
+    }
+
+    function createtable(arr){
+        var br=document.createElement("br");
+        br.setAttribute("id","output");
+        document.body.appendChild(br);
+        var table = document.createElement('table');
+        table.setAttribute("align","center");
+        table.setAttribute("cellspacing","2px");
+        table.setAttribute("id","output");
+        table.setAttribute("border","1px dotted #999");
+        var input = arr;
+        for(var row in input)
+        {
+            var tr=document.createElement('tr');
+            tr.setAttribute("style","text-align:center");
+            for(var column in input[row])
+            {
+                idname=row.toString()+","+column.toString();
+                var td=document.createElement('td');
+                td.setAttribute("id",idname)
+                td.innerHTML = input[row][column];
+                tr.appendChild(td)
+
+            }
+            table.appendChild(tr);
+        }
+        document.body.appendChild(table);
+    }
+    function output(){
+        while(document.getElementById("output")!=null){
+			document.getElementById("output").remove();
+		}
+        
+        var rnti=document.getElementById("rnti").value;
+		var l=document.getElementById("l").value;
+		var msl=document.getElementById("msl").value;
+		var ncee=document.getElementById("ncee").value;
+        
+        var m=27;
+        var n=l_arr.length +4;
+        const temp= new Array(m).fill(-1).map( () => new Array(n).fill(-1));
+        MakeStandardEmptyArray(temp,msl,l,rnti,ncee,m,n);
+        createtable(temp);   
+        colortable(temp,m,n,l,msl,rnti,ncee);     
+    }
+</script>
+		
+</html>
